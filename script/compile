@@ -1,0 +1,4 @@
+#!/bin/sh
+rm -f public/js/questions.js
+cat config/package | grep "^[A-Za-z0-9_/]*.js$" | xargs cat >> public/js/questions.js
+java -jar tools/yuicompressor-2.4.2/build/yuicompressor-2.4.2.jar -o public/js/questions.min.js public/js/questions.js

@@ -1,0 +1,5 @@
+src/application.js
+src/models/category.js
+src/controllers/categories.js
+src/views/categories/index.js
+src/views/categories/edit.js
