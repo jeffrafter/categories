@@ -19,14 +19,14 @@ Questions.Collections.Categories = Backbone.Collection.extend({
 });
 
 Questions.Controllers.Categories = Backbone.Controller.extend({
+  // Note, the routing order is important or "new" would be considered an id
   routes: {
-    "":                       "index",
-    "!/categories/new":       "build",
-    "!/categories/:id":       "edit"
+    "":                 "index",
+    "!/categories/new": "build",
+    "!/categories/:id": "edit"
   },
 
   edit: function(id) {
-//    if (id == "new") return this.build();
     var category = new Questions.Category({ id: id });
     category.fetch({
       success: function(model, resp) {
@@ -57,7 +57,6 @@ Questions.Controllers.Categories = Backbone.Controller.extend({
   }
 });
 
-var tmp = null;
 Questions.Views.Categories.Index = Backbone.View.extend({
   initialize: function() {
     this.categories = this.options.collection;
@@ -65,16 +64,7 @@ Questions.Views.Categories.Index = Backbone.View.extend({
   },
 
   render: function() {
-    if(this.categories.length > 0) {
-      var out = "<h3><a href='#!/categories/new'>Create New</a></h3><ul>";
-      _(this.categories.models).each(function(item) {
-        out += "<li><a href='#!/categories/" + item.id + "'>" + item.escape('name') + "</a></li>";
-      });
-      out += "</ul>";
-    } else {
-      out = "<h3>No categories! <a href='#!/categories/new'>Create one</a></h3>";
-    }
-    $(this.el).html(out);
+    $(this.el).html($(ich.categoryIndex({"categories": this.categories.toJSON()})));
     $('#questions').html(this.el);
   }
 });
@@ -97,11 +87,9 @@ Questions.Views.Categories.Edit = Backbone.View.extend({
       description: this.$('[name=description]').val() }, {
       success: function(model, resp) {
         new Questions.Views.Notice({ message: flash });
-
         self.model = model;
         self.render();
         self.delegateEvents();
-
         Backbone.history.saveLocation('!/categories/' + model.id);
       },
       error: function() {
@@ -112,21 +100,8 @@ Questions.Views.Categories.Edit = Backbone.View.extend({
   },
 
   render: function() {
-    var out = '<form>';
-    out += "<label for='name'>Name</label>";
-    out += "<input name='name' type='text' />";
-
-    out += "<label for='description'>Description</label>";
-    out += "<textarea name='description'>" + (this.model.escape('description') || '') + "</textarea>";
-
-    var submitText = this.model.isNew() ? 'Create' : 'Save';
-
-    out += "<button>" + submitText + "</button>";
-    out += "</form>";
-
-    $(this.el).html(out);
+    $(this.el).html($(ich.categoryEdit(this.model.toJSON())));
     $('#questions').html(this.el);
-
     this.$('[name=name]').val(this.model.get('name')); // use val, for security reasons
   }
 });

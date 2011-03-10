@@ -16,11 +16,9 @@ Questions.Views.Categories.Edit = Backbone.View.extend({
       description: this.$('[name=description]').val() }, {
       success: function(model, resp) {
         new Questions.Views.Notice({ message: flash });
-
         self.model = model;
         self.render();
         self.delegateEvents();
-
         Backbone.history.saveLocation('!/categories/' + model.id);
       },
       error: function() {
@@ -31,21 +29,8 @@ Questions.Views.Categories.Edit = Backbone.View.extend({
   },
 
   render: function() {
-    var out = '<form>';
-    out += "<label for='name'>Name</label>";
-    out += "<input name='name' type='text' />";
-
-    out += "<label for='description'>Description</label>";
-    out += "<textarea name='description'>" + (this.model.escape('description') || '') + "</textarea>";
-
-    var submitText = this.model.isNew() ? 'Create' : 'Save';
-
-    out += "<button>" + submitText + "</button>";
-    out += "</form>";
-
-    $(this.el).html(out);
+    $(this.el).html($(ich.categoryEdit(this.model.toJSON())));
     $('#questions').html(this.el);
-
     this.$('[name=name]').val(this.model.get('name')); // use val, for security reasons
   }
 });
