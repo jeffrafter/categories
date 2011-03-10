@@ -21,12 +21,12 @@ Questions.Collections.Categories = Backbone.Collection.extend({
 Questions.Controllers.Categories = Backbone.Controller.extend({
   routes: {
     "":                       "index",
-    "!/categories/:id":       "edit",
-    "!/categories/new":       "build"
+    "!/categories/new":       "build",
+    "!/categories/:id":       "edit"
   },
 
   edit: function(id) {
-    console.log("Editing: "+id);
+//    if (id == "new") return this.build();
     var category = new Questions.Category({ id: id });
     category.fetch({
       success: function(model, resp) {

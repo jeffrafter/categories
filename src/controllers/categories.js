@@ -1,12 +1,12 @@
 Questions.Controllers.Categories = Backbone.Controller.extend({
+  // Note, the routing order is important or "new" would be considered an id
   routes: {
-    "":                       "index",
-    "!/categories/:id":       "edit",
-    "!/categories/new":       "build"
+    "":                 "index",
+    "!/categories/new": "build",
+    "!/categories/:id": "edit"
   },
 
   edit: function(id) {
-    console.log("Editing: "+id);
     var category = new Questions.Category({ id: id });
     category.fetch({
       success: function(model, resp) {
