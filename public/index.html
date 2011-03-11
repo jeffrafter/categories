@@ -8,10 +8,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Question Categories</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/questions.css?v=2">
+  <link rel="stylesheet" href="css/questions.css">
+  <link rel="stylesheet" href="css/facebox.css">
+  <link rel="stylesheet" href="fonts/pecita/stylesheet.css" type="text/css" charset="utf-8">
 </head>
 <body>
-  <h1><a href="#">Questions Administration</a></h1>
+  <h1><a href="index.html">Questions Administration</a></h1>
   <div id="notice"></div>
   <div id="questions"></div>
 
@@ -20,6 +22,7 @@
   <script src="./js/libs/backbone.min.js"></script>
   <script src="./js/libs/backbone-localstorage.min.js"></script>
   <script src="./js/libs/ICanHaz.min.js"></script>
+  <script src="./js/libs/facebox.js"></script>
   <script src="./js/questions.js"></script>
 
   <script id="categoryIndex" type="text/html">
@@ -27,24 +30,46 @@
     <ul>
       {{#categories}}
         <li>
-          <a href='#!/categories/{{id}}'>{{name}}</a>
+          <a href='#!/categories/{{id}}'>
+            <h2>{{name}}</h2>
+            <p>{{description}}</p>
+          </a>
         </li>
       {{/categories}}
     </ul>
   </script>
 
   <script id="categoryEdit" type="text/html">
-    <form>
-      <label for='name'>Name</label>
-      <input name='name' type='text' value='{{name}}'>
-      <label for='description'>Description</label>
-      <textarea name='description'>{{description}}</textarea>
-      <button>Save</button>
-    </form>
+    <div class="header"><h1><a>Category</a></h1></div>
+    <div class="article">
+      <form method="post" class="category">
+        <label for='name'>Name</label>
+        <input name='name' type='text' value='{{name}}'>
+        <label for='description'>Description</label>
+        <textarea name='description'>{{description}}</textarea>
+      </form>
+    </div>
+    <div class="footer">
+      <button class="button save" onclick="$(document).trigger('close.facebox')">Save</button>
+      <button class="button delete" onclick="$(document).trigger('close.facebox')">Delete</button>
+    </div>
   </script>
 
   <script>
     $(function() {
+      // This is to remove the flicker in the transition in webkit
+      // Adding this property full time makes the text blurry.
+      // Coincidentally, blurring the text when the overlay shows is nice.
+      $(document).bind('reveal.facebox', function() {
+        $('ul li a').css({"-webkit-backface-visibility": "hidden"});
+      });
+      $(document).bind('close.facebox', function() {
+        $('ul li a').css({"-webkit-backface-visibility": "visible"});
+      });
+      // Return to the default page on close
+      $(document).bind('close.facebox', function() {
+         window.location.hash = '#';
+      });
       Questions.init();
     });
   </script>

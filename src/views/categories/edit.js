@@ -1,37 +1,36 @@
 Questions.Views.Categories.Edit = Backbone.View.extend({
   events: {
-    "submit form": "save"
+    "click .save": "save",
+    "click .delete": "remove"
   },
 
   initialize: function() {
+    _.bindAll(this, 'render');
+    this.model.bind('change', this.render);
     this.render();
   },
 
   save: function() {
     var self = this;
-    var flash = this.model.isNew() ? 'Successfully created!' : "Saved!";
-
     this.model.save({
       name: this.$('[name=name]').val(),
       description: this.$('[name=description]').val() }, {
       success: function(model, resp) {
-        new Questions.Views.Notice({ message: flash });
         self.model = model;
-        self.render();
         self.delegateEvents();
         Backbone.history.saveLocation('!/categories/' + model.id);
       },
-      error: function() {
-        new Questions.Views.Error();
-      }
+      error: function() {}
     });
-    return false;
+  },
+
+  remove: function() {
+    this.model.destroy();
   },
 
   render: function() {
     $(this.el).html($(ich.categoryEdit(this.model.toJSON())));
-    $('#questions').html(this.el);
-    this.$('[name=name]').val(this.model.get('name')); // use val, for security reasons
+    $.facebox(this.el);
   }
 });
 
