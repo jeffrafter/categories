@@ -1,5 +1,6 @@
 src/application.js
 src/models/category.js
+src/helpers/collection_view.js
 src/controllers/categories.js
-src/views/categories/index.js
+src/views/categories/show.js
 src/views/categories/edit.js
