@@ -191,7 +191,8 @@ ul li a{
   text-align: left;
   font-size:0.9em;
   display: block;
-  margin-bottom:4px;
+  margin-bottom:6px;
+  margin-top: 12px;
 }
 
 .popup form input, .popup form textarea {
@@ -203,7 +204,7 @@ ul li a{
 }
 
 .popup .content {
-  padding: 12px;
+  padding: 24px;
 }
 
 label, input[type=button], input[type=submit], button { cursor: pointer; }
